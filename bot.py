@@ -17,7 +17,7 @@ def save_config():
 async def on_ready():
     mashup=emoji_mashup.EmojiMashupBot(bot.config["twitter"])
 
-    tweet=choice(mashup.get_top_tweets(50,exclude_ids=bot.config["already_used"]))
+    tweet=choice(mashup.get_top_tweets(100,exclude_ids=bot.config["already_used"]))
     bot.config["already_used"].append(tweet["id"])
     save_config()
 
