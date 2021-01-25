@@ -7,6 +7,8 @@ def limit_handled(cursor):
         except tweepy.RateLimitError:
             print("Waiting 15min...")
             time.sleep(15 * 60)
+        except StopIteration:
+            break
 
 class EmojiMashupBot():
     def __init__(self,access_tokens,store_file="tweets.json"):
@@ -25,14 +27,11 @@ class EmojiMashupBot():
         tweets=list()
         index=0
         print("Début du téléchargement")
-        try:
-            for status in limit_handled(tweepy.Cursor(self.api.user_timeline,id="EmojiMashupBot").items()):
-                if status.text.count("+")==1 and "media" in status.entities and len(status.entities["media"])==1:
-                    tweets.append({"id":status.id,"text":status.text,"rt":status.retweet_count,"likes":status.favorite_count,"image":status.entities["media"][0]["media_url"]})
-                index+=1
-                print("Téléchargement du tweet {}".format(index), end='\r')
-        except StopIteration:
-            pass
+        for status in limit_handled(tweepy.Cursor(self.api.user_timeline,id="EmojiMashupBot").items()):
+            if status.text.count("+")==1 and "media" in status.entities and len(status.entities["media"])==1:
+                tweets.append({"id":status.id,"text":status.text,"rt":status.retweet_count,"likes":status.favorite_count,"image":status.entities["media"][0]["media_url"]})
+            index+=1
+            print("Téléchargement du tweet {}".format(index), end='\r')
         self.data={"last_id":tweets[0]["id"],"tweets":tweets,"last_updated":time.time()}
         self.save_config()
         print("Fin du téléchargement")
@@ -40,13 +39,10 @@ class EmojiMashupBot():
     def update_tweets(self):
         print("Début de la mise à jour")
         last_id=self.data["last_id"]
-        try:
-            for status in limit_handled(tweepy.Cursor(self.api.user_timeline,id="EmojiMashupBot",since_id=last_id).items()):
-                if self.data["last_id"]==last_id: self.data["last_id"]=status.id
-                if status.text.count("+")==1 and "media" in status.entities and len(status.entities["media"])==1:
-                    self.data["tweets"].append({"id":status.id,"text":status.text,"rt":status.retweet_count,"likes":status.favorite_count,"image":status.entities["media"][0]["media_url"]})
-        except StopIteration:
-            pass
+        for status in limit_handled(tweepy.Cursor(self.api.user_timeline,id="EmojiMashupBot",since_id=last_id).items()):
+            if self.data["last_id"]==last_id: self.data["last_id"]=status.id
+            if status.text.count("+")==1 and "media" in status.entities and len(status.entities["media"])==1:
+                self.data["tweets"].append({"id":status.id,"text":status.text,"rt":status.retweet_count,"likes":status.favorite_count,"image":status.entities["media"][0]["media_url"]})
             
         print("Fin de la mise à jour")
 
