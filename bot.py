@@ -42,9 +42,13 @@ async def on_ready():
     print("Picture changed")
 
     if "previous_emoji" in bot.config.keys():
-        previous_emoji=await guild.fetch_emoji(bot.config["previous_emoji"])
-        await previous_emoji.delete()
+        try:
+            previous_emoji=await guild.fetch_emoji(bot.config["previous_emoji"])
+            await previous_emoji.delete()
+        except discord.errors.NotFound:
+            print("previous_emoji not found")
         del bot.config["previous_emoji"]
+        
 
     if "add_emote" in bot.config.keys() and bot.config["add_emote"]:
         emoji=await guild.create_custom_emoji(name="daily_emote",image=icon)
