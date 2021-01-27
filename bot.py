@@ -3,7 +3,7 @@ from random import choice
 from PIL import Image, ImageChops, ImageDraw
 import requests
 
-bot=discord.Client()
+bot=discord.Client(max_messages=None)
 
 def trim(im):
     bg = Image.new(im.mode, im.size, im.getpixel((0,0)))
