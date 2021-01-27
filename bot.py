@@ -25,6 +25,7 @@ def save_config():
 
 @bot.event
 async def on_ready():
+    print("Starting")
     mashup=emoji_mashup.EmojiMashupBot(bot.config["twitter"])
     if "already_used" not in bot.config.keys(): bot.config["already_used"]=list()
     tweet=choice(mashup.get_top_tweets(100,exclude_ids=bot.config["already_used"]))
@@ -32,7 +33,7 @@ async def on_ready():
 
     image = Image.open(requests.get(tweet["image"], stream=True).raw)
     image.putalpha(255)
-    ImageDraw.floodfill(image,(0,0),(0,0,0,0),thresh=30)
+    ImageDraw.floodfill(image,(0,0),(0,0,0,0),thresh=25)
     image=trim(image)
     image.save("image.png")
 
@@ -49,8 +50,7 @@ async def on_ready():
             await previous_emoji.delete()
         except discord.errors.NotFound:
             print("previous_emoji not found")
-        del bot.config["previous_emoji"]
-        
+        del bot.config["previous_emoji"] 
 
     if "add_emote" in bot.config.keys() and bot.config["add_emote"]:
         emoji=await guild.create_custom_emoji(name="daily_emote",image=icon)
