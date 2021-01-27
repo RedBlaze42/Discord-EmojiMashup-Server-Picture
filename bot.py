@@ -1,6 +1,6 @@
 import discord,json,emoji_mashup
 from random import choice
-from PIL import Image, ImageChops
+from PIL import Image, ImageChops, ImageDraw
 import requests
 
 bot=discord.Client()
@@ -31,10 +31,12 @@ async def on_ready():
     bot.config["already_used"].append(tweet["id"])
 
     image = Image.open(requests.get(tweet["image"], stream=True).raw)
+    image.putalpha(255)
+    ImageDraw.floodfill(image,(0,0),(0,0,0,0),thresh=30)
     image=trim(image)
-    image.save("image.jpg")
+    image.save("image.png")
 
-    with open('image.jpg', 'rb') as f:
+    with open('image.png', 'rb') as f:
         icon = f.read()
 
     guild=bot.get_guild(bot.config["guild_id"])
