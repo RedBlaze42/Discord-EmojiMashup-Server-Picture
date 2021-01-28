@@ -52,7 +52,7 @@ class EmojiMashupBot():
         if exclude_ids is None:
             sorted_tweets=sorted(self.data["tweets"],reverse=True,key=lambda x: x["rt"]+x["likes"])
         else:
-            sorted_tweets=sorted([tweet for tweet in self.data["tweets"] if tweet["id"] not in exclude_ids],reverse=True,key=lambda x: x["rt"]+x["likes"])
+            sorted_tweets=sorted([tweet for tweet in self.data["tweets"] if tweet["id"] not in exclude_ids],reverse=True,key=lambda x: x["rt"]*2+x["likes"])
         return sorted_tweets[:top]
 
     def get_config(self):
