@@ -1,4 +1,5 @@
-import tweepy,json,os,time
+import tweepy, json, os, time
+from PIL import Image, ImageDraw, ImageChops
 
 def limit_handled(cursor):
     while True:
@@ -9,6 +10,21 @@ def limit_handled(cursor):
             time.sleep(15 * 60)
         except StopIteration:
             break
+
+def trim(im):
+    bg = Image.new(im.mode, im.size, im.getpixel((0,0)))
+    diff = ImageChops.difference(im, bg)
+    diff = ImageChops.add(diff, diff, 2.0, -100)
+    bbox = diff.getbbox()
+    if bbox:
+        return im.crop(bbox)
+    else:
+         return im
+
+def transparency(im):
+    im.putalpha(255)
+    ImageDraw.floodfill(im,(0,0),(0,0,0,0),thresh=25)
+    return im
 
 class EmojiMashupBot():
     def __init__(self,access_tokens,store_file="tweets.json"):

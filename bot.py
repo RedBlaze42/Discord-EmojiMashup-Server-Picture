@@ -5,16 +5,6 @@ import requests
 
 bot=discord.Client(max_messages=None)
 
-def trim(im):
-    bg = Image.new(im.mode, im.size, im.getpixel((0,0)))
-    diff = ImageChops.difference(im, bg)
-    diff = ImageChops.add(diff, diff, 2.0, -100)
-    bbox = diff.getbbox()
-    if bbox:
-        return im.crop(bbox)
-    else:
-         return im
-
 def load_config():
     with open("config.json","r") as f:
         bot.config=json.load(f)
@@ -32,9 +22,8 @@ async def on_ready():
     bot.config["already_used"].append(tweet["id"])
 
     image = Image.open(requests.get(tweet["image"], stream=True).raw)
-    image.putalpha(255)
-    ImageDraw.floodfill(image,(0,0),(0,0,0,0),thresh=25)
-    image=trim(image)
+    image=emoji_mashup.transparency(image)
+    image=emoji_mashup.trim(image)
     image.save("image.png")
 
     with open('image.png', 'rb') as f:
