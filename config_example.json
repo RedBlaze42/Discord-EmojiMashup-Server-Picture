@@ -1,0 +1,11 @@
+{
+    "token": "discord token",
+    "twitter": {
+        "CONSUMER_KEY": "CONSUMER_KEY",
+        "CONSUMER_SECRET": "CONSUMER_SECRET",
+        "ACCESS_KEY": "ACCESS_KEY",
+        "ACCESS_SECRET": "ACCESS_SECRET"
+    },
+    "guild_id": 0,
+    "add_emote": true
+}
