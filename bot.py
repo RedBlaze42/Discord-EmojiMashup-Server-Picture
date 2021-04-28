@@ -48,7 +48,7 @@ async def on_ready():
     if "channel" in bot.config.keys():
         channel = await bot.fetch_channel(bot.config["channel"])
         if channel is not None:
-            await channel.send("Nouvel photo de serveur:\nhttps://twitter.com/EmojiMashupBot/status/{}".format(tweet["id"]))
+            await channel.send("Nouvelle photo de serveur:\nhttps://twitter.com/EmojiMashupBot/status/{}".format(tweet["id"]))
 
     save_config()
     await bot.close()
