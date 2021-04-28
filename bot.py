@@ -45,6 +45,11 @@ async def on_ready():
         emoji=await guild.create_custom_emoji(name="daily_emote",image=icon)
         bot.config["previous_emoji"]=emoji.id
 
+    if "channel" in bot.config.keys():
+        channel = await bot.fetch_channel(bot.config["channel"])
+        if channel is not None:
+            await channel.send("Nouvel photo de serveur:\nhttps://twitter.com/EmojiMashupBot/status/{}".format(tweet["id"]))
+
     save_config()
     await bot.close()
 
