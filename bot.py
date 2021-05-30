@@ -18,7 +18,7 @@ async def on_ready():
     print("Starting")
     mashup=emoji_mashup.EmojiMashupBot(bot.config["twitter"])
     if "already_used" not in bot.config.keys(): bot.config["already_used"]=list()
-    tweet=choice(mashup.get_top_tweets(40,exclude_ids=bot.config["already_used"]))
+    tweet=choice(mashup.get_top_tweets(100,exclude_ids=bot.config["already_used"]))
     bot.config["already_used"].append(tweet["id"])
 
     image = Image.open(requests.get(tweet["image"], stream=True).raw)
