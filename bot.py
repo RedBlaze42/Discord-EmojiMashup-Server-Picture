@@ -33,6 +33,11 @@ async def on_ready():
     await guild.edit(icon=icon)
     print("Picture changed")
 
+    if "channel" in bot.config.keys():
+        channel = await bot.fetch_channel(bot.config["channel"])
+        if channel is not None:
+            await channel.send("Nouvelle photo de serveur:\nhttps://twitter.com/EmojiMashupBot/status/{}".format(tweet["id"]))
+
     if "previous_emoji" in bot.config.keys():
         try:
             previous_emoji=await guild.fetch_emoji(bot.config["previous_emoji"])
@@ -44,11 +49,6 @@ async def on_ready():
     if "add_emote" in bot.config.keys() and bot.config["add_emote"]:
         emoji=await guild.create_custom_emoji(name="daily_emote",image=icon)
         bot.config["previous_emoji"]=emoji.id
-
-    if "channel" in bot.config.keys():
-        channel = await bot.fetch_channel(bot.config["channel"])
-        if channel is not None:
-            await channel.send("Nouvelle photo de serveur:\nhttps://twitter.com/EmojiMashupBot/status/{}".format(tweet["id"]))
 
     save_config()
     await bot.close()
